@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>購物車裡的猶豫｜線上購物行為問卷分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f2f4f8;--card:#fff;--ink:#101828;--muted:#5b677a;--line:#e1e6ee;--track:#e8ecf3;--acc:#ff5a36;--acc2:#ffa273;--teal:#0f9d8a;--teal2:#86d9cb;--lil:#7566e8;--lil2:#bcb4f8;--navy:#0f1b33;--ins:#e6f6f2;--insink:#15564c;--warn:#fff3dc;--warnink:#7a5314;--sh:0 12px 32px rgba(16,24,40,.07)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1020;--card:#131c33;--ink:#eef2fa;--muted:#9aa8c0;--line:#243252;--track:#1f2b47;--ins:#11332f;--insink:#9fe3d6;--warn:#3a2c10;--warnink:#f2d9a4;--sh:none}}
+:root[data-theme="dark"]{--bg:#0a1020;--card:#131c33;--ink:#eef2fa;--muted:#9aa8c0;--line:#243252;--track:#1f2b47;--ins:#11332f;--insink:#9fe3d6;--warn:#3a2c10;--warnink:#f2d9a4;--sh:none}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.7}
+a{color:inherit;text-decoration:none}:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+aside{background:var(--navy);color:#dbe4f5;padding:30px 16px;position:sticky;top:env(safe-area-inset-top,0px);height:calc(100vh - env(safe-area-inset-top,0px));overflow:auto}
+.brand{display:flex;gap:10px;align-items:center;font-weight:900;font-size:17px;line-height:1.35;margin:0 10px 28px;color:#fff}.brand i{font-style:normal;font-size:22px}
+nav a{display:flex;gap:11px;align-items:center;padding:9px 12px;border-radius:10px;color:#aebbd4;font-size:14px;margin:2px 0;transition:background .2s,color .2s}
+nav a:before{content:"";width:7px;height:7px;border-radius:50%;background:#3a4b6e;transition:.25s}
+nav a:hover{background:#1a2a4b;color:#fff}nav a.on{color:#fff;background:#1d2f55}nav a.on:before{background:var(--acc);box-shadow:0 0 0 4px rgba(255,90,54,.25)}
+.sidefoot{font-size:12px;color:#8393b1;margin:30px 10px 0;border-top:1px solid #26365a;padding-top:14px}
+main{max-width:1380px;width:100%;padding:28px clamp(16px,3vw,44px) 70px;margin:0 auto}
+.hero{background:radial-gradient(900px 400px at 85% 110%,rgba(255,90,54,.35),transparent 60%),linear-gradient(135deg,#0f1b33,#1c3366);color:#fff;border-radius:26px;padding:clamp(24px,4vw,52px);display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:center;overflow:hidden;position:relative}
+.hero:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(90deg,#000,transparent 80%)}
+.hero>*{position:relative}.hero small{color:#b9c8e6;font-size:14px;font-weight:500}
+.hero h1{font-size:clamp(34px,5.2vw,64px);line-height:1.12;margin:10px 0 16px;font-weight:900;letter-spacing:-.02em}
+.hero p{color:#d3def2;max-width:520px;margin:0;font-size:16px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.pill{font-size:13px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);padding:5px 12px;border-radius:999px}
+.stage{position:relative;height:310px;max-width:400px;width:100%;justify-self:center}
+.stage .ph{position:absolute;width:98px;height:98px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35));transform:rotate(var(--r));animation:drop .9s cubic-bezier(.3,1.35,.5,1) both;animation-delay:var(--d)}
+@keyframes drop{from{transform:translateY(-300px) rotate(calc(var(--r) * -3));opacity:0}to{opacity:1}}
+.cart{position:absolute;left:-2%;right:-2%;bottom:0;height:176px;z-index:3}
+.badge{position:absolute;right:2%;bottom:128px;z-index:4;background:var(--acc);color:#fff;border-radius:16px;padding:6px 14px;font-weight:900;font-size:13px;line-height:1.3;text-align:center;animation:pop .6s cubic-bezier(.3,1.6,.5,1) 1.9s both}.badge b{display:block;font:700 26px "Space Grotesk",sans-serif}
+@keyframes pop{from{transform:scale(0)}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 30px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.kpi:after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c,var(--acc))}
+.kpi small{display:block;color:var(--muted);font-size:13px}.kpi strong{font:700 38px/1.15 "Space Grotesk","Noto Sans TC",sans-serif;display:block;margin:4px 0;letter-spacing:-.03em}.kpi span{font-size:12px;color:var(--muted)}
+section{margin:46px 0}.section-head{margin-bottom:18px}.section-head h2{font-size:28px;margin:0;font-weight:900;letter-spacing:-.01em}.section-head p{color:var(--muted);font-size:14px;margin:4px 0 0;max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--sh);min-width:0}.card.wide{grid-column:1/-1}.card h3{font-size:17px;margin:0 0 3px}.sub{color:var(--muted);font-size:12.5px;margin:0 0 18px}
+.chart{display:flex;flex-direction:column;gap:12px}.barrow{display:grid;grid-template-columns:minmax(110px,34%) minmax(80px,1fr) 104px;gap:12px;align-items:center;font-size:13px;border-radius:8px;transition:background .2s}.barrow:hover{background:var(--track)}
+.barlabel{color:var(--muted);line-height:1.4;overflow-wrap:anywhere}.track{height:14px;background:var(--track);border-radius:20px;overflow:hidden}
+.fill,.rankfill{height:100%;border-radius:20px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i,0) * 70ms)}
+.fill{background:linear-gradient(90deg,var(--acc),var(--acc2))}.fill[data-c=t]{background:linear-gradient(90deg,var(--teal),var(--teal2))}.fill[data-c=l]{background:linear-gradient(90deg,var(--lil),var(--lil2))}
+.in .fill,.in .rankfill{width:var(--w)}
+.barvalue{text-align:right;font:700 13px "Space Grotesk","Noto Sans TC",sans-serif;white-space:nowrap}
+.chartnote{font-size:12px;color:var(--muted);margin-top:14px}
+.donut{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.donut svg{width:176px;height:176px;flex:none}.ring{fill:none;stroke:var(--track);stroke-width:14}
+.seg{fill:none;stroke-width:14;stroke-dasharray:0 251.2;stroke-dashoffset:var(--o);transition:stroke-dasharray 1.1s cubic-bezier(.2,.8,.2,1);transition-delay:var(--dl)}.in .seg{stroke-dasharray:var(--d) 251.2}
+.donut g{transform:rotate(-90deg);transform-origin:50px 50px}.dn{fill:var(--ink);font:700 15px "Space Grotesk",sans-serif;text-anchor:middle}.dl{fill:var(--muted);font-size:5.5px;text-anchor:middle}
+.legend{display:flex;flex-direction:column;gap:7px;font-size:13px;flex:1;min-width:150px}.legend div{display:flex;gap:8px;align-items:center}.legend i{width:10px;height:10px;border-radius:3px;flex:none}.legend b{margin-left:auto;font-family:"Space Grotesk",sans-serif}
+.ranklist{display:flex;flex-direction:column;gap:11px}.rankitem{display:grid;grid-template-columns:28px minmax(130px,1fr) 1fr 54px;gap:12px;align-items:center}.rankno{color:var(--muted);font:500 13px "Space Grotesk",sans-serif}.rankname{font-size:13px;color:var(--muted);line-height:1.4}.ranktrack{height:13px;background:var(--track);border-radius:20px;overflow:hidden}.rankfill{background:linear-gradient(90deg,var(--teal),var(--teal2))}.rankscore{text-align:right;font:700 15px "Space Grotesk",sans-serif}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:0 0 16px}.lg span{display:flex;align-items:center;gap:6px}.lg i{width:14px;height:14px;border-radius:4px}
+.srow{display:grid;grid-template-columns:minmax(140px,32%) 1fr 48px;gap:12px;align-items:center;margin:9px 0;font-size:13px}.stack{display:flex;height:22px;border-radius:7px;overflow:hidden;clip-path:inset(0 100% 0 0 round 7px);transition:clip-path 1.2s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i) * 60ms)}.in .stack{clip-path:inset(0 0 0 0 round 7px)}
+.stack span{display:grid;place-items:center;font-size:11px;color:#fff;font-weight:700;min-width:0;border-right:1px solid var(--card)}
+.insight{border-left:4px solid var(--teal);padding:12px 16px;background:var(--ins);border-radius:0 12px 12px 0;color:var(--insink);font-size:14px;margin-top:16px}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.shot{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:var(--sh);transition:transform .3s}.shot:hover{transform:translateY(-4px) rotate(-.6deg)}
+.shot .ph{width:100%;height:auto;border-radius:12px;display:block}.shot h4{margin:10px 4px 0;font-size:14px}.shot p{margin:0 4px 4px;font:700 22px "Space Grotesk",sans-serif;color:var(--acc)}
+.shot{position:relative}.tag{position:absolute;top:20px;left:20px;background:var(--navy);color:#fff;font-size:11px;padding:2px 9px;border-radius:999px}
+.crosswrap{overflow-x:auto}.cross{border-collapse:separate;border-spacing:4px;width:100%;font-size:12px;min-width:780px}.cross th{color:var(--muted);font-weight:500;padding:6px;line-height:1.35}.cross td:first-child{font-weight:700;white-space:nowrap;padding-right:10px}
+.cell{display:block;border-radius:8px;padding:9px 2px;text-align:center;font-variant-numeric:tabular-nums;opacity:0;transform:scale(.8);transition:.5s;transition-delay:calc(var(--i) * 45ms)}.in .cell{opacity:1;transform:none}.cell b{display:block;font-size:14px}
+.callout{background:linear-gradient(120deg,#0f1b33,#24457f);color:#e6eefc;border-radius:18px;padding:20px 24px;font-size:15px;margin-top:16px}.callout strong{color:#ffb592}
+.findings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.finding{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--sh);opacity:0;transform:translateY(16px);transition:.7s}.finding.in{opacity:1;transform:none}
+.finding .tg{font-size:12px;color:var(--acc);font-weight:700}.finding h3{margin:4px 0;font-size:18px}.finding p{font-size:13.5px;color:var(--muted);margin:0}.finding .metric{font:700 34px "Space Grotesk",sans-serif;color:var(--ink);margin:8px 0 0;letter-spacing:-.02em}
+.comments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.quote{background:var(--track);border-radius:14px 14px 14px 3px;padding:12px 14px;font-size:13px;color:var(--ink)}
+.warning{background:var(--warn);color:var(--warnink);border-radius:12px;padding:13px 16px;font-size:13px;margin:14px 0}
+.footer{border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:12.5px;margin-top:50px}
+@media(max-width:980px){.shell{grid-template-columns:1fr}aside{position:sticky;height:auto;padding:12px 14px;z-index:20}.brand{display:none}nav{display:flex;overflow-x:auto;gap:4px}nav a{white-space:nowrap}.sidefoot{display:none}.kpis,.strip{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}}
+@media(max-width:680px){.grid,.findings,.comments{grid-template-columns:1fr}.card.wide{grid-column:auto}.barrow{grid-template-columns:minmax(95px,34%) 1fr 84px;gap:8px}.rankitem{grid-template-columns:22px minmax(110px,1fr) 1fr 46px}.srow{grid-template-columns:1fr 44px}.srow .barlabel{grid-column:1/-1}.kpi strong{font-size:30px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.finding,.cell{opacity:1;transform:none}.stack{clip-path:none}}
+@media print{aside{display:none}.shell{display:block}.card,.kpi{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div class="brand"><i>🛒</i><span>線上購物行為<br>問卷分析</span></div>
+  <nav id="nav">
+    <a href="#overview">調查概況</a><a href="#profile">受訪者輪廓</a><a href="#cart">加入購物車原因</a><a href="#delay">延遲購買因素</a><a href="#behavior">放置期間行為</a><a href="#decision">最終購買決策</a><a href="#cross">交叉分析</a><a href="#insights">研究發現</a><a href="#open">開放式回覆</a>
+  </nav>
+  <div class="sidefoot">資料來源：課堂專題問卷回覆<br>統計依上傳 Excel 原始資料計算</div>
+</aside>
+<main>
+<header class="hero" id="overview">
+  <div>
+    <small>消費者文化 · 問卷調查報告</small>
+    <h1>消費者線上購物行為與購買決策因素</h1>
+    <p>以蝦皮購物車為情境，觀察商品從「加入」到「結帳或放棄」之間，消費者怎麼猶豫、比較、再決定。</p>
+    <div class="pills"><span class="pill">匿名問卷</span><span class="pill">原始回覆 72 份</span><span class="pill">追問題有效樣本 70 份</span></div>
+  </div>
+  <div class="stage" id="stage" aria-hidden="true"></div>
+</header>
+<div class="kpis" id="kpis"></div>
+
+<section id="profile">
+  <div class="section-head"><h2>受訪者基本資料</h2><p>先了解填答者的年齡、性別與蝦皮使用習慣。</p></div>
+  <div class="grid" id="profileCharts"></div>
+</section>
+
+<section id="cart">
+  <div class="section-head"><h2>加入購物車的原因</h2><p>複選題；每位受訪者可選擇多個原因，百分比以 72 份回覆為分母。</p></div>
+  <div class="strip" id="strip"></div>
+  <div class="grid"><div class="card wide" id="cartReasons"></div></div>
+  <div class="insight"><strong>研究觀察：</strong>加入購物車同時包含實際需求、商品收藏、賣家比較與購物規劃，不宜直接將「加入購物車」視為「已決定購買」。</div>
+</section>
+
+<section id="delay">
+  <div class="section-head"><h2>延遲購買因素</h2><p>第 7～20 題為五點頻率量表；分數越高代表受訪者自陳該情況越常發生。</p></div>
+  <div class="grid"><div class="card wide" id="likertRank"></div><div class="card wide" id="likertDist"></div></div>
+  <div class="warning">量表標示依問卷原始設定：1＝從未、2＝很少、3＝偶爾、4＝有時、5＝經常。平均分數是描述性統計，不代表因果關係。</div>
+</section>
+
+<section id="behavior">
+  <div class="section-head"><h2>購物車放置期間的行為</h2><p>觀察消費者是否持續查看、比較商品，或逐漸忘記購物車內的商品。</p></div>
+  <div class="grid"><div class="card wide" id="behaviors"></div><div class="card" id="intentChange"></div><div class="card" id="notifications"></div></div>
+</section>
+
+<section id="decision">
+  <div class="section-head"><h2>最終購買決策</h2><p>呈現加入購物車後的結果、放置時間，以及促成購買或放棄的主要因素。</p></div>
+  <div class="grid"><div class="card wide" id="outcomes"></div><div class="card" id="duration"></div><div class="card" id="triggers"></div><div class="card wide" id="abandon"></div></div>
+</section>
+
+<section id="cross">
+  <div class="section-head"><h2>放置時間 × 最終結果</h2><p>依每個放置時間區間，呈現不同最終結果的人數與列百分比，顏色越深比例越高。</p></div>
+  <div class="card wide"><h3>不同放置時間的購物車結果分布</h3><p class="sub">每列百分比以該放置時間區間的受訪者人數為分母；可觀察分布，但不宜單憑此表推論因果。</p><div class="crosswrap" id="crossTable"></div></div>
+</section>
+
+<section id="insights">
+  <div class="section-head"><h2>研究發現與消費者心理</h2><p>將問卷數據轉化為可用於專題簡報的重點敘述。</p></div>
+  <div class="findings" id="findings"></div>
+  <div class="callout"><strong>整體研究觀點：</strong>本次問卷顯示，購物車不只是結帳前的暫存區，也可能被用來收藏商品、比較選項與延後決策。消費者在放置期間重新評估需求，可能完成購買，也可能降低意願或放棄購買。</div>
+</section>
+
+<section id="open">
+  <div class="section-head"><h2>開放式回覆與改善建議</h2><p>依受訪者文字回覆整理主題；分類可能重疊，非互斥統計。</p></div>
+  <div class="grid"><div class="card" id="commentThemes"></div><div class="card"><h3>受訪者具體建議摘錄</h3><p class="sub">以下為原始回覆中的代表性文字。</p><div class="comments" id="quotes"></div></div></div>
+</section>
+
+<div class="footer"><strong>資料與解讀說明</strong><br>原始回覆共 72 份。第 1～6 題均有 72 份回答；第 7～29 題有 70 份有效回答，另 2 份因第 5 題選擇「從未」而未填後續題目。複選題百分比以有作答人數為分母，故加總可能超過 100%。開放式題目依文字內容進行主題歸納，並非標準化量表。<br><br>本頁呈現描述性統計與探索性交叉分析；樣本以本次問卷受訪者為限，不宜直接推論所有蝦皮使用者。商品圖為示意插圖。</div>
+</main>
+</div>
+<script>
+const DATA={"total": 72, "mainN": 72, "followN": 70, "demographics": [{"title": "年齡分布", "n": 72, "data": [{"label": "18–24 歲", "count": 38, "pct": 52.8}, {"label": "25–30歲", "count": 20, "pct": 27.8}, {"label": "35歲以上", "count": 7, "pct": 9.7}, {"label": "31–35歲", "count": 4, "pct": 5.6}, {"label": "18 歲以下", "count": 3, "pct": 4.2}]}, {"title": "性別分布", "n": 72, "data": [{"label": "女", "count": 57, "pct": 79.2}, {"label": "男", "count": 13, "pct": 18.1}, {"label": "不方便透露", "count": 2, "pct": 2.8}]}, {"title": "蝦皮使用情況", "n": 72, "data": [{"label": "有，目前仍有使用", "count": 62, "pct": 86.1}, {"label": "有，但已經很少使用", "count": 8, "pct": 11.1}, {"label": "曾經使用，但目前已不再使用", "count": 2, "pct": 2.8}]}, {"title": "蝦皮購買頻率", "n": 72, "data": [{"label": "每月 2–3 次", "count": 32, "pct": 44.4}, {"label": "每 2–3 個月一次", "count": 12, "pct": 16.7}, {"label": "少於每 3 個月一次", "count": 9, "pct": 12.5}, {"label": "每月一次", "count": 9, "pct": 12.5}, {"label": "每週一次", "count": 8, "pct": 11.1}, {"label": "每週2次(含)以上", "count": 2, "pct": 2.8}]}, {"title": "延遲結帳經驗", "n": 72, "data": [{"label": "經常", "count": 29, "pct": 40.3}, {"label": "總是", "count": 22, "pct": 30.6}, {"label": "偶爾", "count": 13, "pct": 18.1}, {"label": "很少", "count": 6, "pct": 8.3}, {"label": "從未", "count": 2, "pct": 2.8}]}], "cartReasons": [{"label": "有實際購買需求（例如日常用品）", "count": 48, "pct": 66.7}, {"label": "瀏覽商品時覺得喜歡，先加入購物車", "count": 47, "pct": 65.3}, {"label": "想比較不同賣家的價格、品質或評價", "count": 44, "pct": 61.1}, {"label": "方便之後快速找到商品，不需要重新搜尋", "count": 38, "pct": 52.8}, {"label": "想湊滿額折扣或免運", "count": 26, "pct": 36.1}, {"label": "想等待商品降價或促銷活動", "count": 21, "pct": 29.2}, {"label": "想購買商品作為禮物", "count": 16, "pct": 22.2}, {"label": "商品外觀或設計很吸引我", "count": 14, "pct": 19.4}, {"label": "受到廣告或社群推薦影響", "count": 9, "pct": 12.5}, {"label": "冷靜期", "count": 1, "pct": 1.4}], "likert": [{"label": "有忘記購買的經驗", "mean": 3.29, "n": 70, "counts": {"1": 6, "2": 14, "3": 16, "4": 22, "5": 12}}, {"label": "商品需要海外配送，等待時間較長", "mean": 3.37, "n": 70, "counts": {"1": 7, "2": 11, "3": 15, "4": 23, "5": 14}}, {"label": "不信任賣家或擔心商品品質", "mean": 3.51, "n": 70, "counts": {"1": 4, "2": 8, "3": 16, "4": 32, "5": 10}}, {"label": "運費、稅金或手續費高於預期", "mean": 2.96, "n": 70, "counts": {"1": 8, "2": 23, "3": 10, "4": 22, "5": 7}}, {"label": "商品總金額超出預算，等待預算充足時再購買", "mean": 3.46, "n": 70, "counts": {"1": 9, "2": 7, "3": 13, "4": 25, "5": 16}}, {"label": "尚未確定商品是否符合自己的需求", "mean": 3.63, "n": 70, "counts": {"1": 4, "2": 4, "3": 14, "4": 40, "5": 8}}, {"label": "此商品沒有立即購買的需求", "mean": 4.04, "n": 70, "counts": {"1": 1, "2": 3, "3": 11, "4": 32, "5": 23}}, {"label": "需要確認或比較商品規格、尺寸是否符合需求", "mean": 3.61, "n": 70, "counts": {"1": 6, "2": 5, "3": 12, "4": 34, "5": 13}}, {"label": "想等待商品降價、折扣或免運優惠", "mean": 3.73, "n": 70, "counts": {"1": 8, "2": 4, "3": 12, "4": 21, "5": 25}}, {"label": "為了避免衝動購物，而選擇先考慮一段時間", "mean": 3.89, "n": 70, "counts": {"1": 3, "2": 6, "3": 11, "4": 26, "5": 24}}, {"label": "商品到貨時間或配送資訊不明確", "mean": 2.6, "n": 70, "counts": {"1": 14, "2": 22, "3": 17, "4": 12, "5": 5}}, {"label": "商品評價不足、買家實拍照片太少或賣家資訊不完整", "mean": 3.19, "n": 70, "counts": {"1": 8, "2": 15, "3": 16, "4": 18, "5": 13}}, {"label": "我會將商品加入購物車，作為比較不同商品的方式", "mean": 4.09, "n": 70, "counts": {"1": 2, "2": 2, "3": 10, "4": 30, "5": 26}}, {"label": "我會把蝦皮購物車當作商品收藏清單", "mean": 3.69, "n": 70, "counts": {"1": 5, "2": 11, "3": 8, "4": 23, "5": 23}}], "behaviors": [{"label": "與其他賣家的相同商品比較", "count": 29, "pct": 41.4}, {"label": "偶爾打開購物車瀏覽", "count": 28, "pct": 40.0}, {"label": "會忘記商品仍在購物車內", "count": 27, "pct": 38.6}, {"label": "加入後就很少再查看", "count": 26, "pct": 37.1}, {"label": "等待免運活動", "count": 23, "pct": 32.9}, {"label": "查看其他平台是否有更便宜的價格", "count": 22, "pct": 31.4}, {"label": "查看是否有新的折價券或優惠", "count": 20, "pct": 28.6}, {"label": "定期查看商品價格是否變動", "count": 17, "pct": 24.3}, {"label": "反覆查看商品評價", "count": 9, "pct": 12.9}], "intentChange": [{"label": "稍微降低", "count": 32, "pct": 45.7}, {"label": "明顯降低", "count": 15, "pct": 21.4}, {"label": "不一定", "count": 7, "pct": 10.0}, {"label": "稍微提高", "count": 7, "pct": 10.0}, {"label": "沒有變化", "count": 6, "pct": 8.6}, {"label": "明顯提高", "count": 3, "pct": 4.3}], "notifications": [{"label": "很少", "count": 29, "pct": 41.4}, {"label": "偶爾", "count": 25, "pct": 35.7}, {"label": "從未", "count": 10, "pct": 14.3}, {"label": "經常", "count": 5, "pct": 7.1}, {"label": "總是", "count": 1, "pct": 1.4}], "outcomes": [{"label": "經過比較其他商品後，最後完成購買", "count": 17, "pct": 24.3}, {"label": "商品持續留在購物車中，尚未決定是否購買", "count": 15, "pct": 21.4}, {"label": "因為忘記商品而沒有購買", "count": 12, "pct": 17.1}, {"label": "最後將商品從購物車刪除", "count": 11, "pct": 15.7}, {"label": "等待商品降價或優惠後，才完成購買", "count": 10, "pct": 14.3}, {"label": "等待一段時間後，最後完成購買", "count": 5, "pct": 7.1}], "duration": [{"label": "2 週以上", "count": 24, "pct": 34.3}, {"label": "1～2 週", "count": 20, "pct": 28.6}, {"label": "4～7 天", "count": 13, "pct": 18.6}, {"label": "1～3 天", "count": 8, "pct": 11.4}, {"label": "當天", "count": 5, "pct": 7.1}], "triggers": [{"label": "確認商品符合需求", "count": 19, "pct": 27.1}, {"label": "免運優惠", "count": 12, "pct": 17.1}, {"label": "確實產生購買需求", "count": 12, "pct": 17.1}, {"label": "限時促銷活動", "count": 7, "pct": 10.0}, {"label": "薪資或零用錢入帳", "count": 6, "pct": 8.6}, {"label": "商品降價", "count": 6, "pct": 8.6}, {"label": "獲得折價券", "count": 5, "pct": 7.1}, {"label": "確認商品評價良好", "count": 1, "pct": 1.4}, {"label": "急切需要商品的時候", "count": 1, "pct": 1.4}, {"label": "在心中排序更前面的想買的東西都買完，然後剛好有餘裕", "count": 1, "pct": 1.4}], "abandon": [{"label": "發現自己其實不需要", "count": 34, "pct": 48.6}, {"label": "找到更便宜的商品", "count": 10, "pct": 14.3}, {"label": "購買意願隨時間降低", "count": 8, "pct": 11.4}, {"label": "忘記購買", "count": 7, "pct": 10.0}, {"label": "商品價格超出預算", "count": 7, "pct": 10.0}, {"label": "等不到預期的優惠", "count": 4, "pct": 5.7}], "cross": [{"duration": "當天", "n": 5, "values": [{"label": "商品持續留在購物車中，尚未決定是否購買", "count": 0, "pct": 0.0}, {"label": "最後將商品從購物車刪除", "count": 3, "pct": 60.0}, {"label": "經過比較其他商品後，最後完成購買", "count": 0, "pct": 0.0}, {"label": "因為忘記商品而沒有購買", "count": 1, "pct": 20.0}, {"label": "等待商品降價或優惠後，才完成購買", "count": 0, "pct": 0.0}, {"label": "等待一段時間後，最後完成購買", "count": 1, "pct": 20.0}]}, {"duration": "1～3 天", "n": 8, "values": [{"label": "商品持續留在購物車中，尚未決定是否購買", "count": 1, "pct": 12.5}, {"label": "最後將商品從購物車刪除", "count": 0, "pct": 0.0}, {"label": "經過比較其他商品後，最後完成購買", "count": 1, "pct": 12.5}, {"label": "因為忘記商品而沒有購買", "count": 4, "pct": 50.0}, {"label": "等待商品降價或優惠後，才完成購買", "count": 2, "pct": 25.0}, {"label": "等待一段時間後，最後完成購買", "count": 0, "pct": 0.0}]}, {"duration": "4～7 天", "n": 13, "values": [{"label": "商品持續留在購物車中，尚未決定是否購買", "count": 4, "pct": 30.8}, {"label": "最後將商品從購物車刪除", "count": 1, "pct": 7.7}, {"label": "經過比較其他商品後，最後完成購買", "count": 6, "pct": 46.2}, {"label": "因為忘記商品而沒有購買", "count": 0, "pct": 0.0}, {"label": "等待商品降價或優惠後，才完成購買", "count": 2, "pct": 15.4}, {"label": "等待一段時間後，最後完成購買", "count": 0, "pct": 0.0}]}, {"duration": "1～2 週", "n": 20, "values": [{"label": "商品持續留在購物車中，尚未決定是否購買", "count": 4, "pct": 20.0}, {"label": "最後將商品從購物車刪除", "count": 3, "pct": 15.0}, {"label": "經過比較其他商品後，最後完成購買", "count": 7, "pct": 35.0}, {"label": "因為忘記商品而沒有購買", "count": 2, "pct": 10.0}, {"label": "等待商品降價或優惠後，才完成購買", "count": 2, "pct": 10.0}, {"label": "等待一段時間後，最後完成購買", "count": 2, "pct": 10.0}]}, {"duration": "2 週以上", "n": 24, "values": [{"label": "商品持續留在購物車中，尚未決定是否購買", "count": 6, "pct": 25.0}, {"label": "最後將商品從購物車刪除", "count": 4, "pct": 16.7}, {"label": "經過比較其他商品後，最後完成購買", "count": 3, "pct": 12.5}, {"label": "因為忘記商品而沒有購買", "count": 5, "pct": 20.8}, {"label": "等待商品降價或優惠後，才完成購買", "count": 4, "pct": 16.7}, {"label": "等待一段時間後，最後完成購買", "count": 2, "pct": 8.3}]}], "outcomeLabels": ["商品持續留在購物車中，尚未決定是否購買", "最後將商品從購物車刪除", "經過比較其他商品後，最後完成購買", "因為忘記商品而沒有購買", "等待商品降價或優惠後，才完成購買", "等待一段時間後，最後完成購買"], "comments": ["沒", "無", "不能直接做同類商品的比較", "沒", "無", "無", "一鍵刪除所選商品", "可以定期自己刪除商品", "可以新增超過1000東西", "無", "沒什麼想法", "無", "希望不限加入購物車商品的數量。", "顯示製造地，內容物若有附說明書時不要有簡體字的出現", "無", "希望可以大量調整編輯商品（如一次刪除等", "暫無想法", "放入購物車時間太久可以自動刪除商品", "沒有", "無", "同產品可比價", "由於購物車會放太多東西，希望能有「搜尋」功能，輸入文字快速照到自己放進的產品", "如果有購物車內的商品即時資訊可能不錯", "沒想到", "容量不足", "無", "呈現方式更直觀", "不要自己把優惠券的算入最終價格", "無", "之後有相關活動（例如免運）可以提醒消費者", "數量限制", "希望可以直接把優惠活動列入，不需要自己一個ㄧ個的去選擇後再加進去，可以節省很多時間。", "無", "從購物車產品的左滑或者右滑加入收藏夾", "無", "不知道", "無", "無", "無", "商品即將售完時可以提醒", "購物車本身好像沒有太多要改善的地方，用得很習慣，頂多是優惠券有時候會在結帳頁發現被用完，需要再回到購物車頁", "免運", "希望不要有限制，可以一直放一直放一直放", "無", "還好 還不錯用", "置頂某些商品", "有分類功能，還有不要卡頓", "無", "清理購物車的功能把不需要的都係可以都刪一刪不然很常購物車滿", "優惠的顯示很混亂", "無", "可以調整商品順序方便比較同樣商品價格", "降價提醒", "無想法", "隔日到貨都沒有隔日到貨", "新增搜尋功能，這樣比較好找到購物車中的商品進行結帳或刪除", "無", "無", "無", "目前使用起來無需改進～忘記結帳還可以變相省錢", "降價/免運通知", "沒有", "沒有", "可以讓使用者能標記自己對商品的需要程度", "分類加入", "可以依照金額優先序排列", "無", "加裝可以移動商品排序的功能", "可以提醒顧客價格下降"], "commentThemes": [{"label": "價格、優惠與通知", "count": 11}, {"label": "批次管理與容量", "count": 10}, {"label": "商品搜尋、分類與排序", "count": 9}, {"label": "商品比較與資訊呈現", "count": 6}, {"label": "其他建議", "count": 4}, {"label": "操作體驗與系統穩定", "count": 4}], "commentN": 69, "substantiveComments": ["不能直接做同類商品的比較", "一鍵刪除所選商品", "可以定期自己刪除商品", "可以新增超過1000東西", "希望不限加入購物車商品的數量。", "顯示製造地，內容物若有附說明書時不要有簡體字的出現", "希望可以大量調整編輯商品（如一次刪除等", "放入購物車時間太久可以自動刪除商品", "同產品可比價", "由於購物車會放太多東西，希望能有「搜尋」功能，輸入文字快速照到自己放進的產品", "如果有購物車內的商品即時資訊可能不錯", "容量不足", "呈現方式更直觀", "不要自己把優惠券的算入最終價格", "之後有相關活動（例如免運）可以提醒消費者", "數量限制", "希望可以直接把優惠活動列入，不需要自己一個ㄧ個的去選擇後再加進去，可以節省很多時間。", "從購物車產品的左滑或者右滑加入收藏夾", "商品即將售完時可以提醒", "購物車本身好像沒有太多要改善的地方，用得很習慣，頂多是優惠券有時候會在結帳頁發現被用完，需要再回到購物車頁", "免運", "希望不要有限制，可以一直放一直放一直放", "還好 還不錯用", "置頂某些商品", "有分類功能，還有不要卡頓", "清理購物車的功能把不需要的都係可以都刪一刪不然很常購物車滿", "優惠的顯示很混亂", "可以調整商品順序方便比較同樣商品價格", "降價提醒", "隔日到貨都沒有隔日到貨", "新增搜尋功能，這樣比較好找到購物車中的商品進行結帳或刪除", "目前使用起來無需改進～忘記結帳還可以變相省錢", "降價/免運通知", "可以讓使用者能標記自己對商品的需要程度", "分類加入", "可以依照金額優先序排列", "加裝可以移動商品排序的功能", "可以提醒顧客價格下降"]};
+const fmt=n=>Number(n).toLocaleString("zh-TW");
+const $=id=>document.getElementById(id);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+function card(t,s){const c=el("div","card");c.append(el("h3","",t));if(s)c.append(el("p","sub",s));return c}
+const P={
+shoe:["#ffe3d6",'<path d="M16 58c0-9 6-11 11-19l9 4c4 5 11 7 19 7l21 6c6 2 8 6 8 11v3H16z" fill="#ff5a36"/><rect x="16" y="67" width="73" height="7" rx="3.5" fill="#101828"/><path d="M38 49l5 5M46 52l5 5" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>'],
+head:["#dfe7ff",'<path d="M26 58V50a24 24 0 0 1 48 0v8" fill="none" stroke="#101828" stroke-width="6"/><rect x="20" y="54" width="14" height="24" rx="7" fill="#7566e8"/><rect x="66" y="54" width="14" height="24" rx="7" fill="#7566e8"/>'],
+bag:["#dff5ee",'<path d="M36 40v-6a14 14 0 0 1 28 0v6" fill="none" stroke="#101828" stroke-width="5"/><rect x="24" y="40" width="52" height="40" rx="6" fill="#0f9d8a"/><circle cx="50" cy="60" r="5" fill="#fff"/>'],
+lip:["#ffe0ea",'<rect x="38" y="52" width="24" height="26" rx="3" fill="#101828"/><rect x="40" y="38" width="20" height="16" rx="2" fill="#e8b84a"/><path d="M42 38l4-14 12 6-2 8z" fill="#e0365f"/>'],
+mug:["#fff1c9",'<rect x="26" y="38" width="40" height="40" rx="7" fill="#ffc83d"/><path d="M66 46h6a8 8 0 0 1 0 18h-6" fill="none" stroke="#ffc83d" stroke-width="6"/><path d="M38 28c-3 4 3 6 0 10M50 28c-3 4 3 6 0 10" stroke="#9a7a1c" stroke-width="3" fill="none" stroke-linecap="round"/>'],
+box:["#e9e2ff",'<path d="M22 40l28-14 28 14v34L50 88 22 74z" fill="#b9b0f7"/><path d="M22 40l28 14 28-14M50 54v34" stroke="#7566e8" stroke-width="4" fill="none"/>']};
+const prod=(k,s="")=>`<svg class="ph" style="${s}" viewBox="0 0 100 100" role="img" aria-label="商品示意插圖"><rect width="100" height="100" rx="18" fill="${P[k][0]}"/>${P[k][1]}</svg>`;
+/* 英雄區：商品掉進購物車 */
+(function(){const pos=[["lip","8%",18,-8,.2],["box","38%",6,5,.4],["mug","66%",22,-5,.6],["shoe","0%",84,-11,.8],["head","31%",70,6,1],["bag","62%",88,-4,1.2]];
+$("stage").innerHTML=pos.map(p=>prod(p[0],`left:${p[1]};top:${p[2]}px;--r:${p[3]}deg;--d:${p[4]}s`)).join("")+
+`<svg class="cart" viewBox="0 0 300 176"><path d="M4 8h26l10 16" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><polygon points="34,22 288,22 256,112 62,112" fill="#16284d" stroke="#fff" stroke-width="8" stroke-linejoin="round"/><path d="M88 40v56M130 40v56M172 40v56M214 40v56" stroke="rgba(255,255,255,.18)" stroke-width="4"/><circle cx="90" cy="146" r="14" fill="#ff5a36"/><circle cx="232" cy="146" r="14" fill="#ff5a36"/></svg><div class="badge"><b>${DATA.total}</b>份問卷回覆</div>`})();
+
+function renderBars(target,title,items,n,o={}){
+ const c=card(title,o.sub||`有效回答 ${n} 份 · 數值標示人數與比例`);const w=el("div","chart");const max=Math.max(...items.map(x=>x.count),1);
+ items.forEach((it,i)=>{const r=el("div","barrow");r.style.setProperty("--i",i);r.append(el("div","barlabel",it.label));
+  const t=el("div","track"),f=el("div","fill");f.style.setProperty("--w",it.count/max*100+"%");if(o.c)f.dataset.c=o.c;f.title=`${it.label}：${it.count} 人（${it.pct}%）`;t.append(f);
+  r.append(t,el("div","barvalue",`${it.count} 人 · ${it.pct}%`));w.append(r)});
+ c.append(w);if(o.note)c.append(el("div","chartnote",o.note));target.append(c)}
+function donut(target,title,items,n){
+ const c=card(title,`有效回答 ${n} 份`),C=251.2,cols=["#ff5a36","#0f9d8a","#ffc83d","#7566e8"];let off=0;
+ const segs=items.map((it,i)=>{const d=it.count/n*C,s=`<circle class="seg" cx="50" cy="50" r="40" stroke="${cols[i%4]}" style="--d:${(d-1.2).toFixed(1)};--o:${(-off).toFixed(1)};--dl:${i*.25}s"><title>${it.label}：${it.count} 人</title></circle>`;off+=d;return s}).join("");
+ const w=el("div","donut");w.innerHTML=`<svg viewBox="0 0 100 100"><circle class="ring" cx="50" cy="50" r="40"/><g>${segs}</g><text class="dn" x="50" y="52">${items[0].pct}%</text><text class="dl" x="50" y="62">${items[0].label.slice(0,8)}</text></svg><div class="legend">${items.map((it,i)=>`<div><i style="background:${cols[i%4]}"></i>${it.label}<b>${it.count} 人</b></div>`).join("")}</div>`;
+ c.append(w);target.append(c)}
+function renderProfile(){const t=$("profileCharts"),D=DATA.demographics;
+ renderBars(t,D[0].title,D[0].data,D[0].n,{sub:"有效回答 72 份"});donut(t,D[1].title,D[1].data,D[1].n);donut(t,D[2].title,D[2].data,D[2].n);
+ renderBars(t,D[3].title,D[3].data,D[3].n,{c:"t"});renderBars(t,D[4].title,D[4].data,D[4].n,{c:"l"})}
+function renderKpis(){
+ const d=DATA.demographics[4].data,often=d.filter(x=>["經常","總是"].includes(x.label)).reduce((a,b)=>a+b.count,0),
+ low=DATA.intentChange.filter(x=>["稍微降低","明顯降低"].includes(x.label)).reduce((a,b)=>a+b.count,0),
+ lg=DATA.duration.filter(x=>["1～2 週","2 週以上"].includes(x.label)).reduce((a,b)=>a+b.count,0);
+ [["問卷回收數",DATA.total,0,"","份原始回覆","#ff5a36"],["經常／總是延遲結帳",often/72*100,1,"%",`${often} / 72 人`,"#0f9d8a"],["購買意願降低",low/70*100,1,"%",`${low} / 70 人`,"#7566e8"],["放置至少一週",lg/70*100,1,"%",`${lg} / 70 人`,"#ffc83d"]].forEach(v=>{
+  const k=el("div","kpi"),s=el("strong","","0");k.style.setProperty("--c",v[5]);s.dataset.to=v[1];s.dataset.dec=v[2];s.dataset.suf=v[3];k.append(el("small","",v[0]),s,el("span","",v[4]));$("kpis").append(k)})}
+function countUp(s){const to=+s.dataset.to,dec=+s.dataset.dec,suf=s.dataset.suf,t0=performance.now();
+ (function f(t){const p=Math.min((t-t0)/1300,1),e=1-Math.pow(1-p,3);s.textContent=(to*e).toFixed(dec)+suf;if(p<1)requestAnimationFrame(f)})(t0)}
+function renderStrip(){const R=DATA.cartReasons,it=[["shoe","先收藏",R[1],"喜歡的商品"],["head","比較中",R[2],"不同賣家"],["bag","等免運",R[4],"湊滿額折扣"],["mug","送禮物",R[6],"買給別人"]];
+ $("strip").innerHTML=it.map(x=>`<div class="shot">${prod(x[0])}<span class="tag">${x[1]}</span><h4>${x[3]}</h4><p>${x[2].pct}%</p></div>`).join("")}
+function renderLikert(){
+ const s=[...DATA.likert].sort((a,b)=>b.mean-a.mean),c=card("五點量表平均分數排名","有效回答均為 70 份；分數範圍 1～5，越高代表自陳頻率越高"),l=el("div","ranklist");
+ s.forEach((x,i)=>{const r=el("div","rankitem"),t=el("div","ranktrack"),f=el("div","rankfill");f.style.setProperty("--w",x.mean/5*100+"%");f.style.setProperty("--i",i);t.append(f);
+  r.append(el("div","rankno",String(i+1).padStart(2,"0")),el("div","rankname",x.label),t,el("div","rankscore",x.mean.toFixed(2)));l.append(r)});
+ c.append(l);$("likertRank").append(c);
+ const col=["#ffd9c8","#ffb592","#ff8a5e","#f0532b","#b8330f"],d=card("各題的五點分布","每條代表 70 人的作答比例，顏色越深代表越常發生；右側為平均分數"),
+ lg=el("div","lg");lg.innerHTML=["1 從未","2 很少","3 偶爾","4 有時","5 經常"].map((t,i)=>`<span><i style="background:${col[i]}"></i>${t}</span>`).join("");d.append(lg);
+ DATA.likert.forEach((x,i)=>{const r=el("div","srow"),st=el("div","stack");st.style.setProperty("--i",i);
+  for(let k=1;k<=5;k++){const v=x.counts[k]||0,sp=el("span","",v>=6?String(v):"");sp.style.flex=v;sp.style.background=col[k-1];if(k<3)sp.style.color="#6a3320";sp.title=`${k} 分：${v} 人`;st.append(sp)}
+  r.append(el("div","barlabel",x.label),st,el("div","rankscore",x.mean.toFixed(2)));d.append(r)});
+ $("likertDist").append(d)}
+function renderCross(){const t=el("table","cross"),h=el("tr");h.append(el("th","","放置時間"));DATA.outcomeLabels.forEach(o=>h.append(el("th","",o)));t.append(h);
+ DATA.cross.forEach((row,ri)=>{const tr=el("tr");tr.append(el("td","",`${row.duration}（n=${row.n}）`));
+  row.values.forEach((v,ci)=>{const td=el("td"),s=el("span","cell");s.style.setProperty("--i",ri+ci);s.style.background=`rgba(255,90,54,${.07+v.pct/100*.78})`;s.style.color=v.pct>45?"#fff":"inherit";
+   const b=el("b","",`${v.count} 人`);s.append(b,document.createTextNode(`${v.pct}%`));td.append(s);tr.append(td)});t.append(tr)});$("crossTable").append(t)}
+function renderFindings(){
+ [["01 · 購物車用途","購物車不只是結帳入口","加入購物車的常見原因同時包含實際需求、先收藏喜歡的商品，以及比較不同賣家，顯示購物車具有暫存與比較功能。","65.3%","先收藏喜歡的商品（47/72）"],
+  ["02 · 延遲決策","比較商品與需求評估很突出","比較不同商品的量表平均 4.09 分；沒有立即需求平均 4.04 分，為本次量表中分數最高的兩項。","4.09 分","商品比較平均分數最高"],
+  ["03 · 自我控制","延遲可能是避免衝動消費","避免衝動購物、先考慮一段時間的平均分數為 3.89，顯示延後結帳也可能是消費者的自我評估策略。","3.89 分","避免衝動購物量表平均"],
+  ["04 · 意願變化","放置後購買意願多呈下降","有 47 位受訪者表示購買意願稍微或明顯降低，占有效回答 70 人的 67.1%。","67.1%","購買意願降低（47/70）"],
+  ["05 · 最終放棄","需求重新評估是主要放棄理由","在最終未購買原因題中，34 人選擇「發現自己其實不需要」，占 70 份有效回答的 48.6%。","48.6%","發現自己其實不需要（34/70）"],
+  ["06 · 產品啟示","商品管理與價格資訊可再改善","開放式回覆提到商品搜尋、分類排序、批次刪除、容量，以及降價／免運提醒等改善方向。","多項需求","依開放式回覆歸納"]].forEach((f,i)=>{
+  const x=el("div","finding");x.style.transitionDelay=(i%2)*120+"ms";x.append(el("div","tg",f[0]),el("h3","",f[1]),el("p","",f[2]),el("div","metric",f[3]),el("p","",f[4]));$("findings").append(x)})}
+function renderOpen(){
+ const d=DATA.commentThemes.map(x=>({label:x.label,count:x.count,pct:Math.round(x.count/Math.max(DATA.commentN,1)*1000)/10}));
+ const c=card("開放式回覆主題歸納","以 70 份有效回覆為基礎；同一則回覆可能同時涉及多個主題"),w=el("div","chart"),max=Math.max(...d.map(x=>x.count));
+ d.forEach((x,i)=>{const r=el("div","barrow"),t=el("div","track"),f=el("div","fill");f.dataset.c="l";f.style.setProperty("--w",x.count/max*100+"%");r.style.setProperty("--i",i);t.append(f);r.append(el("div","barlabel",x.label),t,el("div","barvalue",`${x.count} 則`));w.append(r)});
+ c.append(w,el("div","chartnote","主題分類採關鍵字歸類，一則回覆可含多個建議，主題數不可加總解讀為獨立受訪者數。"));$("commentThemes").append(c);
+ DATA.substantiveComments.slice(0,8).forEach(x=>$("quotes").append(el("div","quote",`「${x}」`)))}
+renderKpis();renderProfile();renderStrip();
+renderBars($("cartReasons"),"加入購物車的原因",DATA.cartReasons,72,{sub:"複選題 · N=72 · 可複選，比例不加總為 100%"});
+renderLikert();
+renderBars($("behaviors"),"商品放在購物車期間的行為",DATA.behaviors,70,{sub:"複選題 · N=70 · 可複選，比例不加總為 100%",c:"t"});
+renderBars($("intentChange"),"放置一段時間後的購買意願變化",DATA.intentChange,70,{c:"l"});
+renderBars($("notifications"),"通知或優惠提醒是否促使重新查看",DATA.notifications,70,{c:"t"});
+renderBars($("outcomes"),"加入購物車後的最終結果",DATA.outcomes,70);
+renderBars($("duration"),"商品放置時間",DATA.duration,70,{c:"l"});
+renderBars($("triggers"),"最容易促成最後購買的因素",DATA.triggers,70,{c:"t"});
+renderBars($("abandon"),"最後沒有購買的主要原因",DATA.abandon,70);
+renderCross();renderFindings();renderOpen();
+/* 捲動到可見範圍時才播放圖表動畫 */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");const s=e.target.querySelector("[data-to]");if(s)countUp(s);io.unobserve(e.target)}}),{threshold:.18});
+document.querySelectorAll(".card,.kpi,.finding").forEach(x=>io.observe(x));
+const links=[...document.querySelectorAll("#nav a")],so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-35% 0px -55% 0px"});
+document.querySelectorAll("header.hero,section").forEach(x=>so.observe(x));
+</script>
+</body></html>
